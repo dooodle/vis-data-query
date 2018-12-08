@@ -18,7 +18,7 @@ var port = os.Getenv("VIS_MONDIAL_PORT")
 var sslmode = os.Getenv("VIS_MONDIAL_SSLMODE")
 
 func TestConnectToMondial(t *testing.T) {
-	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s port=%st sslmode=%s", user, dbname, password, host, port, sslmode)
+	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s port=%s sslmode=%s", user, dbname, password, host, port, sslmode)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
