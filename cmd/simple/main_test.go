@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 	"testing"
 
 	_ "github.com/lib/pq"
@@ -32,6 +34,7 @@ func TestConnectToMondial(t *testing.T) {
 		log.Fatal(err)
 	}
 	defer rows.Close()
+
 	var name, code, area, destination string
 	var capital, province sql.NullString
 	for rows.Next() {
@@ -39,7 +42,56 @@ func TestConnectToMondial(t *testing.T) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Println(name, code, capital)
+		//log.Println(name, code, capital)
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}
+
+//this learning test turns a database table into a csv
+func TestConnectToMondialGeneric(t *testing.T) {
+	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s port=%s sslmode=%s", user, dbname, password, host, port, sslmode)
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM country")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	cols, err := rows.Columns()
+	if err != nil {
+		t.Fatalf("Columns: %v", err)
+	}
+
+	_vals := make([]sql.NullString, len(cols))
+	vals := make([]interface{}, len(cols))
+	for i, _ := range cols {
+		vals[i] = &_vals[i]
+	}
+
+	for rows.Next() {
+		err := rows.Scan(vals...)
+		if err != nil {
+			log.Fatal(err)
+		}
+		outs := make([]string, 0)
+		for i := range cols {
+			v := vals[i].(*sql.NullString)
+			if v.Valid {
+				outs = append(outs, strconv.Quote(v.String))
+			} else {
+				outs = append(outs, "")
+			}
+		}
+		csv := strings.Join(outs, ",")
+		fmt.Println(csv)
 	}
 	err = rows.Err()
 	if err != nil {
