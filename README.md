@@ -22,6 +22,6 @@ The following are the lists of microservices in this repository:
 
 # dependencies
 
-## post gres drivers
+## postgres drivers
 
 + `go get github.com/lib/pq`
