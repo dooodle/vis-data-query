@@ -17,7 +17,7 @@ script:
   - docker build -t dooodle/vis-simple .
   - bash install-kubectl
   - bash docker_push
-  - kubectl get pods | grep mondial
-  - kubectl patch deployment mondial-deployment -p   "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
-  - kubectl get pods | grep mondial
+  - kubectl get pods | grep simple
+  - kubectl patch deployment simple-deployment  -p   "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+  - kubectl get pods | grep simple
 
