@@ -7,7 +7,8 @@ services:
   - docker
 
 script:
-  - docker build -t dooodle/vis-mondial .
+  - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server .
+  - docker build -t dooodle/vis-simple .
   - bash install-kubectl
   - bash docker_push
   - kubectl get pods | grep mondial
