@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 	"testing"
@@ -12,17 +11,11 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var user = os.Getenv("VIS_MONDIAL_USER")
-var dbname = os.Getenv("VIS_MONDIAL_DBNAME")
-var password = os.Getenv("VIS_MONDIAL_PASSWORD")
-var host = os.Getenv("VIS_MONDIAL_HOST")
-var port = os.Getenv("VIS_MONDIAL_PORT")
-var sslmode = os.Getenv("VIS_MONDIAL_SSLMODE")
-
 // this test connects to the db and reads known data into known columns.
 // next test needs to load unknown data into unknown number of columns in a string format.
 func TestConnectToMondial(t *testing.T) {
 	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s port=%s sslmode=%s", user, dbname, password, host, port, sslmode)
+	fmt.Println(connStr)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
@@ -52,6 +45,8 @@ func TestConnectToMondial(t *testing.T) {
 }
 
 //this learning test turns a database table into a csv
+var done = false
+
 func TestConnectToMondialGeneric(t *testing.T) {
 	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s port=%s sslmode=%s", user, dbname, password, host, port, sslmode)
 	db, err := sql.Open("postgres", connStr)
@@ -91,7 +86,10 @@ func TestConnectToMondialGeneric(t *testing.T) {
 			}
 		}
 		csv := strings.Join(outs, ",")
-		fmt.Println(csv)
+		if !done {
+			fmt.Println(csv)
+			done = true
+		}
 	}
 	err = rows.Err()
 	if err != nil {
