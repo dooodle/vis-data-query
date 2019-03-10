@@ -19,7 +19,7 @@ The following are the lists of microservices in this repository:
 # simple 
 
 + `simple` is a simple REST microservice that when provided with a datastore identifier and a table name returns all the data in that table in a simple csv format in which *all* values are returned as strings, except nulls.
-+ http://<host>/mondial/<relation-name>
++ `http://<host>/mondial/<relation-name>`
     + `http://<host>/mondial/country`
 ```
 "Albania","AL","Tirana","Albania","28750.00","2800138"
