@@ -34,7 +34,8 @@ name,code,capital,province,area,population
 "Greece","GR","Athina","Attikis","131940.00","10816286"
 "Macedonia","MK","Skopje","Macedonia","25333.00","2059794"
 ```
-+ `http://<host>/mondial/names`. This provides a list of all tables available, this will URL path will change as will how the list is returned.
+
+    + `http://<host>/mondial/names`. This provides a list of all tables available, this will URL path will change as will how the list is returned.
 
 ```
 "borders"
