@@ -18,28 +18,35 @@ The following are the lists of microservices in this repository:
 
 # simple 
 
-`simple` is a simple microservice that when provided with a datastore identifier and a table name returns all the data in that table in a simple csv format in which *all* values are returned as strings, except nulls.
-
-for example.
-
++ `simple` is a simple REST microservice that when provided with a datastore identifier and a table name returns all the data in that table in a simple csv format in which *all* values are returned as strings, except nulls.
++ http://<host>/mondial/<relation-name>
+    + `http://<host>/mondial/country`
 ```
 "Albania","AL","Tirana","Albania","28750.00","2800138"
 "Greece","GR","Athina","Attikis","131940.00","10816286"
 "Macedonia","MK","Skopje","Macedonia","25333.00","2059794"
-"Serbia","SRB","Beograd","Serbia","77474.00","7120666"
-"Montenegro","MNE","Podgorica","Montenegro","14026.00","620029"
-"Kosovo","KOS","Prishtine","Kosovo","10887.00","1733872"
-"Andorra","AND","Andorra la Vella","Andorra","450.00","78115"
-"France","F","Paris","Île-de-France","547030.00","64933400"
-"Spain","E","Madrid","Madrid","504750.00","46815916"
-"Austria","A","Wien","Wien","83850.00","8499759"
-"Czech Republic","CZ","Praha","Praha","78703.00","10562214"
-"Germany","D","Berlin","Berlin","356910.00","80219695"
-"Hungary","H","Budapest","Budapest","93030.00","9937628"
-"Italy","I","Roma","Lazio","301230.00","59433744"
-"Liechtenstein","FL","Vaduz","Liechtenstein","160.00","36636"
-"Cyprus","CY","Lefkosia","Cyprus","9251.00","840407"
-"Gaza Strip","GAZA",,,"365.00","1760037"
+```
+    + `http://<host>/mondial/country?h=true`
+
+```
+name,code,capital,province,area,population
+"Albania","AL","Tirana","Albania","28750.00","2800138"
+"Greece","GR","Athina","Attikis","131940.00","10816286"
+"Macedonia","MK","Skopje","Macedonia","25333.00","2059794"
+```
++ `http://<host>/mondial/names`. This provides a list of all tables available, this will URL path will change as will how the list is returned.
+
+```
+"borders"
+"city"
+"geo_estuary"
+"country_local_name"
+"city_local_name"
+"city_other_name"
+"country_other_name"
+"citylocal_name"
+"cityother_name"
+"city_population"
 ```
 
 # dependencies
