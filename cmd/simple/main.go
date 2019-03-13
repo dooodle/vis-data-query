@@ -41,22 +41,26 @@ func handle(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	table := path.Base(r.URL.Path)
 	h := false
+	n := false
 	if r.FormValue("h") == "true" {
 		h = true
 	}
-	writeTable(w, table, h)
+	if r.FormValue("null") == "true" {
+		n = true
+	}
+	writeTable(w, table, h, n)
 }
 
 func handleNames(w http.ResponseWriter, r *http.Request) {
 	q := "SELECT table_name FROM information_schema.tables WHERE table_schema='public'"
-	WriteQuery(w, q, false)
+	WriteQuery(w, q, false, false)
 }
 
-func writeTable(w io.Writer, table string, header bool) {
-	WriteQuery(w, "SELECT * FROM "+table, header)
+func writeTable(w io.Writer, table string, header bool, null bool) {
+	WriteQuery(w, "SELECT * FROM "+table, header, null)
 }
 
-func WriteQuery(w io.Writer, q string, header bool) {
+func WriteQuery(w io.Writer, q string, header bool, null bool) {
 	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s port=%s sslmode=%s", user, dbname, password, host, port, sslmode)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -85,6 +89,7 @@ func WriteQuery(w io.Writer, q string, header bool) {
 		vals[i] = &_vals[i]
 	}
 
+	hasOneInvalidCol := false
 	for rows.Next() {
 		err := rows.Scan(vals...)
 		if err != nil {
@@ -96,13 +101,16 @@ func WriteQuery(w io.Writer, q string, header bool) {
 			if v.Valid {
 				outs = append(outs, strconv.Quote(v.String))
 			} else {
+				hasOneInvalidCol = true
 				outs = append(outs, "")
 			}
 		}
-		csv := strings.Join(outs, ",")
-
-		w.Write([]byte(csv + "\n"))
-
+		if !hasOneInvalidCol {
+			csv := strings.Join(outs, ",")
+			w.Write([]byte(csv + "\n"))
+		}
+		//reset flag
+		hasOneInvalidCol = false
 	}
 	err = rows.Err()
 	if err != nil {

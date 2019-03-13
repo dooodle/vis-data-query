@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"database/sql"
 	"fmt"
 	"log"
@@ -10,6 +11,17 @@ import (
 
 	_ "github.com/lib/pq"
 )
+
+func TestNoNulls(t *testing.T) {
+	buf := &bytes.Buffer{}
+	writeTable(buf, "economy", true, false)
+	rows := bytes.Split(buf.Bytes(), []byte("\n"))
+	for _, r := range rows {
+		if bytes.Contains(r, []byte("XMAS")) {
+			t.Errorf("XMAS present in list, even though contains nulls")
+		}
+	}
+}
 
 // this test connects to the db and reads known data into known columns.
 // next test needs to load unknown data into unknown number of columns in a string format.
