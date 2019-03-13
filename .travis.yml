@@ -10,7 +10,9 @@ go:
   - 1.11.x
 services:
   - docker
-
+notifications:
+  slack: dooodle:hots3bBY7zx3Dff7425iO67W
+  
 script:
   - go get github.com/lib/pq
   - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server ./cmd/simple/main.go
