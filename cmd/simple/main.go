@@ -101,7 +101,9 @@ func WriteQuery(w io.Writer, q string, header bool, null bool) {
 			if v.Valid {
 				outs = append(outs, strconv.Quote(v.String))
 			} else {
-				hasOneInvalidCol = true
+				if !null { //if a column is invalid exclude if null is set to false
+					hasOneInvalidCol = true
+				}
 				outs = append(outs, "")
 			}
 		}
