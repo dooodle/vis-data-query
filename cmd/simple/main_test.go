@@ -21,6 +21,40 @@ func TestNoNulls(t *testing.T) {
 			t.Errorf("XMAS present in list, even though contains nulls")
 		}
 	}
+
+	buf = &bytes.Buffer{}
+	writeTable(buf, "economy", true, true)
+	rows = bytes.Split(buf.Bytes(), []byte("\n"))
+	found := false
+	for _, r := range rows {
+		if bytes.Contains(r, []byte("XMAS")) {
+			found = true
+		}
+
+	}
+	if !found {
+		t.Errorf("XMAS not present in list, but should be")
+	}
+}
+
+func TestHeader(t *testing.T) {
+	want := "country,gdp,agriculture,service,industry,inflation,unemployment"
+
+	buf := &bytes.Buffer{}
+	writeTable(buf, "economy", true, false)
+	rows := bytes.Split(buf.Bytes(), []byte("\n"))
+
+	if string(rows[0]) != want {
+		t.Errorf("wanted %s got %s", want, string(rows[0]))
+	}
+
+	buf = &bytes.Buffer{}
+	writeTable(buf, "economy", false, false)
+	rows = bytes.Split(buf.Bytes(), []byte("\n"))
+
+	if string(rows[0]) == want {
+		t.Errorf("did not want %s got %s", want, string(rows[0]))
+	}
 }
 
 // this test connects to the db and reads known data into known columns.
