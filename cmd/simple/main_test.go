@@ -61,7 +61,7 @@ func TestHeader(t *testing.T) {
 // next test needs to load unknown data into unknown number of columns in a string format.
 func TestConnectToMondial(t *testing.T) {
 	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s port=%s sslmode=%s", user, dbname, password, host, port, sslmode)
-	fmt.Println(connStr)
+	//fmt.Println(connStr)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
